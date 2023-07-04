@@ -9,6 +9,7 @@ app.use('/auth', authRoutes);
 // Define a route
 require('./routes/privileges.routes')(app);
 require('./routes/cms_users.routes')(app);
+require('./routes/depots_routes.js')(app);
 // Start the server
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
