@@ -16,22 +16,23 @@ const getdepots = (request, response) => {
       response.status(200).json(results.rows)
     })
   };
-  const createdepot = (request, response) => {
-    const { lib_depot,cdeParCalendrier,updated_at,deleted_at,couleur,textcouleur,code } = request.body;
-    const created_at = new Date(); // Get the current date and time
+  // probleme de cdeParCalendrier lors de l'insertion a la base de donnes 
+  // const createdepot = (request, response) => {
+  //   const { lib_depot,cdeParCalendrier,updated_at,deleted_at,couleur,textcouleur,code } = request.body;
+  //   const created_at = new Date(); // Get the current date and time
   
-    pool.query(
-      'INSERT INTO depots (lib_depot, cdeParCalendrier, created_at, updated_at, deleted_at, couleur, textcouleur, code) VALUES ($1, $2, $3, $4, $5, $6, $7,$8) RETURNING id',
-      [lib_depot, cdeParCalendrier, created_at, updated_at, deleted_at, couleur, textcouleur, code],
-      (error, results) => {
-        if (error) {
-          throw error;
-        }
-        const depotId = results.rows[0].id;
-        response.status(201).send(`depot added with ID: ${depotId}`);
-      }
-    );
-  };
+  //   pool.query(
+  //     'INSERT INTO depots ( lib_depot, cdeParCalendrier, created_at, couleur, textcouleur, code) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
+  //     [lib_depot, cdeParCalendrier, created_at , couleur, textcouleur, code],
+  //     (error, results) => {
+  //       if (error) {
+  //         throw error;
+  //       }
+  //       const depotId = results.rows[0].id;
+  //       response.status(201).send(`depot added with ID: ${depotId}`);
+  //     }
+  //   );
+  // };
   const deletedepot = (request, response) => {
     const id = parseInt(request.params.id)
   
@@ -44,6 +45,6 @@ const getdepots = (request, response) => {
   };
   module.exports={
     getdepots,
-    createdepot,
+    // createdepot,
     deletedepot
   }

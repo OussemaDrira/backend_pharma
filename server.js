@@ -11,6 +11,8 @@ require('./routes/privileges.routes')(app);
 require('./routes/cms_users.routes')(app);
 require('./routes/depots_routes.js')(app);
 require('./routes/client_routes.js')(app);
+require('./routes/groupe_client_models.js')(app);
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);

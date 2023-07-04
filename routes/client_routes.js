@@ -3,6 +3,8 @@ module.exports = (app) => {
 
     app.get('/clients', db.getclient);
     app.post('/clients',db.createclient);
+    app.delete('/clients/:id',db.delateclient);
+
   
     
 } 
