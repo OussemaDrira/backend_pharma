@@ -36,36 +36,29 @@ router.post('/register', async (req, res) => {
     }
   });
   // User login
-router.post('/login', async (req, res) => {
-  try {
-    const { login, password ,access_token} = req.body;
-    const id = parseInt(request.params.id)
-
-    if (!login || !password) {
-        return res.status(401).json({ msg: 'login or password non saisies' })
+  router.post('/login', async (req, res) => {
+    try {
+      const { login, password } = req.body;
+  
+      // Retrieve the user from the database
+      const result = await pool.query('SELECT * FROM cms_users WHERE login = $1', [login]);
+      const user = result.rows[0];
+  
+      // Check if the user exists and verify the password
+      if (!user || !(await bcrypt.compare(password, user.password))) {
+        
+        res.status(401).json({ error: 'Invalid username or password' });
+      } else {
+        // Generate a JWT
+        const token = jwt.sign({ userId: user.id }, 'your_secret_key');
+  
+        res.status(200).json({ token });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal server error' });
     }
-   
-    // Retrieve the user from the database
-    const result = await pool.query('SELECT * FROM cms_users WHERE login = $1', [login]);
-    const user = result.rows[0];
-
-    // Check if the user exists and verify the password
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      console.log(login,paasword);
-      res.status(401).json({ error: 'Invalid login or password' });
-    } else {
-      // Generate a JWT
-      const token = jwt.sign({ userId: user.id }, 'your_secret_key');
-    //  update acces token 
-      // await pool.query('update cms_users SET access_token = $1 WHERE id = $2', [ access_token,id]);
-      // res.status(200).json({ token });
-    }
-  } catch (error) {
-    
-    console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
+  });
 module.exports = router;
   
   
