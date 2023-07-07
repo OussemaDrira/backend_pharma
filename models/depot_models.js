@@ -17,22 +17,22 @@ const getdepots = (request, response) => {
     })
   };
   // probleme de cdeParCalendrier lors de l'insertion a la base de donnes 
-  // const createdepot = (request, response) => {
-  //   const { lib_depot,cdeParCalendrier,updated_at,deleted_at,couleur,textcouleur,code } = request.body;
-  //   const created_at = new Date(); // Get the current date and time
+  const createdepot = (request, response) => {
+    const { lib_depot,updated_at,deleted_at,couleur,textcouleur,code,cdcal } = request.body;
+    const created_at = new Date(); // Get the current date and time
   
-  //   pool.query(
-  //     'INSERT INTO depots ( lib_depot, cdeParCalendrier, created_at, couleur, textcouleur, code) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
-  //     [lib_depot, cdeParCalendrier, created_at , couleur, textcouleur, code],
-  //     (error, results) => {
-  //       if (error) {
-  //         throw error;
-  //       }
-  //       const depotId = results.rows[0].id;
-  //       response.status(201).send(`depot added with ID: ${depotId}`);
-  //     }
-  //   );
-  // };
+    pool.query(
+      'INSERT INTO depots ( lib_depot, created_at, couleur, textcouleur, code, cdcal) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
+      [lib_depot, created_at , couleur, textcouleur, code, cdcal],
+      (error, results) => {
+        if (error) {
+          throw error;
+        }
+        const depotId = results.rows[0].id;
+        response.status(201).send(`depot added with ID: ${depotId}`);
+      }
+    );
+  };
   const deletedepot = (request, response) => {
     const id = parseInt(request.params.id)
   
@@ -43,8 +43,27 @@ const getdepots = (request, response) => {
       response.status(200).send(`depots deleted with ID: ${id}`)
     })
   };
+  const updatedepots = (request, response) => {
+    const id = parseInt(request.params.id)
+
+    const { lib_depot,deleted_at,couleur,textcouleur,code,cdcal } = request.body;
+    const updated_at = new Date(); // Get the current date and time
+  
+    pool.query(
+      'UPDATE depots SET lib_depot = $1, updated_at = $2 ,couleur = $3, textcouleur = $4, code= $5, cdcal=$6 WHERE id = $7',
+      [lib_depot, updated_at , couleur, textcouleur, code, cdcal,id],
+      (error, results) => {
+        if (error) {
+          throw error;
+        }
+       
+        response.status(201).send(`depots updated with ID: ${id}`);
+      }
+    );
+  };
   module.exports={
     getdepots,
-    // createdepot,
-    deletedepot
+     createdepot,
+    deletedepot,
+    updatedepots
   }

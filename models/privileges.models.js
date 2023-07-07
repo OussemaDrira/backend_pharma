@@ -60,7 +60,7 @@ const getPrivileges = (request, response) => {
       }
       response.status(200).send(`Privilege deleted with ID: ${id}`)
     })
-  }
+  };
   
   module.exports = {
     getPrivileges,
